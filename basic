@@ -289,18 +289,26 @@ alter table sellers
 add index name_index(name),
 add index name2_index (name2)
 
-Select * from sellers where name=’x’
-Select * from sellers where name=’x’ and name2=’x’
-Select * from sellers where name=’x’ and name2=’x’ and name3=’x’
+INSERT INTO sellers (Name, Name2, Name3, Email)
+VALUES 
+('Alice', 'Bob', 'Carol', 'alice@mail.com'),
+('John', 'Smith', 'Doe', 'john@mail.com'),
+('Jane', 'Doe', 'Alice', 'jane@mail.com');
 
+SELECT * FROM sellers WHERE name='Alice';
+SELECT * FROM sellers WHERE name='Alice' AND name2='Bob';
+SELECT * FROM sellers WHERE name='Alice' AND name2='Bob' AND name3='Carol';
+
+
+SELECT * FROM products
+WHERE name LIKE '%es%' OR description LIKE '%bakso%'
+
+fulltext -> natural,boolean,query expansion
 Alter table products
 	Add fulltext produk_search (name,description)
 
 Alter table products
 	Drop index produk_search
-
-SELECT * FROM products
-WHERE name LIKE '%es%' OR description LIKE '%bakso%'
 
 select*from products 
 where match (name,description)
@@ -313,6 +321,77 @@ against (‘+ayam -bakso’ in boolean mode)
 select * from products 
 where match (name,description)
 against (‘ayam’ with query expansion) 
+
+membuat foreign key 
+create table wishlist 
+(
+id int not null auto_increment,
+id_produk int not null, -> tipe data harus sama dengan id products
+description text,
+primary key(id),
+constraint fk_wishlist_produk
+foreign key(id_produk) references products(id)
+)
+
+alter table wishlist 
+add constraint fk_wishlist_produk
+foreign key(id_produk) references products(id)
+
+alter table wishlist 
+drop constraint fk_wishlist_produk
+
+insert into wishlist (id_produk,description)
+values(1,'enak bgt') berhasil karena ada di tabel products 
+
+insert into wishlist (id_produk,description)
+values(16,'enak bgt') tidak berhasil karena tidak ada di tabel products 
+
+kerena dia berelasi maka ketika data di tabel products dihapus maka akan ditolak 
+delete from products 
+where id=1 -> tidak kehapus karena dia berelasi di tabel wishlist 
+delete from products 
+where id=2  -> berhasil dihapus 
+
+mengubah biar bisa dihapus 
+alter table wishlist 
+add constraint fk_wishlist_produk
+foreign key(id_produk) references products(id)
+on delete cascade on update cascade
+
+jika sudah ditambah cascasde 
+delete from products 
+where id=1 -> bakal kehapus di tabel products dan wishlist 
+
+membuat relasi ketabel products dengan join
+select * from wishlist join products on (wishlist.id_produk=products.id)
+
+select wishlist.id, products.id, products.name, wishlist.description
+from products join wishlist on ( wishlist.id_produk=products.id)
+select w.id, p.id, p.name, w.description
+from products as p join wishlist as w on ( wishlist.id_produk=products.id)
+
+membuat relasi ketabel customers 
+pertama tambahkan kolom dulu 
+alter table wishlist
+add column id_customers int
+
+kedua membuat foreign key ke tabel wishlist 
+alter table wishlist 
+add constraint fk_customers_produk
+foreign key (id_customers) references customers (id)
+
+update wishlist 
+set id_customers=1
+where id=1
+
+
+
+
+
+
+
+
+
 
 
 
