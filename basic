@@ -1,0 +1,327 @@
+create database penjualan
+
+create table barang 
+(
+  kode int,
+  nama varchar (100),
+  jumlah int,
+  harga int 
+)
+
+desc barang 
+
+alter table barang 
+  add column stok int 
+  drop column stok
+  add column stok int
+  change stok kapasitas varchar (10)
+  modify kapasitas int
+  modify kapasitas int after nama
+  modify kapasitas int not null 
+  add primary key (kode)
+  drop primary key 
+  modify jumlah int not null default 0
+  add column tanggal_produksi timestamp not null default current_timestamp
+
+truncate barang = delete from barang 
+
+drop databese, drop table bisa langsung pakai , kalau drop column harus pakai alter table
+
+create table products
+(
+  id varchar (10),
+  name varchar (100),
+  description text,
+  price int unsigned not null
+  quantity int unsigned not null default 0
+  created_at timestamp not null default current_timestamp 
+)
+
+insert into products(id,name,price,quantity)
+values ('P001','mie ayam',10000,100)
+
+update products 
+set quantity=10
+where id='P001'
+
+insert into products( id,name,description,price,quantity)
+values('P002','mie ayam bakso tahu','mie ayam + bakso tahu original',20000,10)
+
+insert into products(id,name,price,quantity)
+values ('P003','mie ayam ceker',20000,10),
+       ('P004','mie ayam spesial',25000,10),
+       ('P005','mie ayam yamin',15000,10) 
+
+create table products
+(
+  id varchar (10),
+  name varchar (100),
+  description text,
+  price int unsigned not null
+  quantity int unsigned not null default 0
+  created_at timestamp not null default current_timestamp 
+  add primary key (id)
+)
+
+alter table products 
+add primary key (id)
+
+select * from products 
+where quantity=10
+
+select id,name from products 
+where quantity=10
+
+update products
+set description='original'
+where id='P001'
+
+update products 
+set category='makanan'
+where quantity=10
+
+update products 
+set category='lain-lain',
+description='bakso tahu'
+where id='P002'
+
+update products
+set price=price+5000
+
+select id as'kode',
+        name as'name',
+        category as'kategori',
+        price as'harga',
+        quantity as 'stok'
+from products 
+
+select p.id as'kode',
+      p.name as'nama',
+      p.category as'kategori',
+      p.price as'harga',
+      p.quantity as 'stok'
+from products as p
+
+select * from products 
+where price>20000
+
+select id,name,price from products 
+where price>20000
+
+select * from products 
+where quantity<=50 and price>=25000
+
+select * from products 
+where category='makanan' or price>=25000
+
+select * from products 
+where (category='makanan' and price>=2500) or quantity <=50
+
+select * from products 
+where name like '%r'
+
+select * from products 
+where name like 'e%'
+
+select * from products 
+where name like '%es%'
+
+select * from products 
+where description is null 
+
+select * from products 
+where description is not null
+
+select * from products 
+where quantity between 300 and 1000
+
+select * from products 
+where category='makanan' or category='minuman'
+
+select * from products 
+where category in ('makanan','minuman')
+
+select * from products
+order by price asc,quantity desc 
+
+select * from products 
+where price>=20000
+order by price asc
+
+select * from products 
+where price>=20000
+order by price
+limit 2
+
+select * from products 
+where price>=20000
+order by price 
+limit 5,2
+
+select distinct category from products
+select 10*10 as hasil
+select round(10+10*5/2,0) as hasil
+
+select id,name,price, price div 1000 as'price in k' from products 
+select *, price div 1000 as'price in k' from products 
+
+select pi()
+select cos(50),tan(50),sin(50)
+select power (8,3)
+select price,tan(price),cos(price),sin(price) from products 
+select *,tan(price),cos(price),sin(price)
+select * from products 
+where price div 1000>15
+
+select lower(name),upper(name),length(name) from products 
+
+select *, year(cretaed_at),month(created_at)
+from products 
+
+select id,creted_at,year(creted_at),month(created_at) from products 
+
+select *, case category
+when 'makanan' then 'enak'
+when 'minuman' then 'seger'
+else 'apa itu?'
+end as'category'
+from products 
+
+select id,name,price,
+if(price>=15000,'mahal','murah') as'rentang'
+from products
+
+select id,name,price,
+if(price<=15000,'murah',
+if(price<=20000,'mahal','mahal banget')
+) as'rentang'
+from products 
+
+select *,
+ifnull (description,'kosong') as'description'
+from products 
+
+select count(id) as'total produk' from products 
+select sum(quantity) as'stok' from products
+select max(price) as'harga termahal' from products 
+select min(price) as'harga termurah' from products
+select avg(price) as'harga rata-rata' from products 
+
+select category,
+count(id) as'total produk' 
+from products
+group by category
+
+select category,
+sum(quantity) as'stok'
+from products
+group by category
+
+select category
+min(price) as'harga termurah'
+from products
+group by category
+
+select category,
+max(price) as'harga termahal'
+from products
+group by category
+
+select category,
+avg(price) as'harga rata-rata'
+from products
+group by category
+
+select category,
+max(price) as harga_termahal
+from products
+group by category
+having harga_termahal>=20000
+
+select category,
+min(price) as harga_termurah
+from products
+group by category
+having harga_termurah>=10000
+
+select category,
+count(id) as jumlah_produk
+from products
+group by category 
+having jumlah_produk>4
+
+create table costumers
+	(
+	Id int not null auto_increment,
+	Email varchar(100),
+	First_name varchar (100),
+	Last_name varchar (100),
+	Primary key (id),
+	Unique key email_unique (email)
+	)
+
+alter table costumers
+add constraint email_unique unique(email)
+
+alter table costumers
+drop constraint email_unique
+
+Create table sellers
+	(
+	Id int not null auto_increment,
+	Name varchar(100),
+	Name2 varchar (100),
+	Name3 varchar (100),
+	Email varchar (100),
+	Primary key (id),
+	Unique key email_unique (email),
+	Index name_index(name),
+	Index name2_index (name2),
+	Index name3_index (name3),
+	Index name_name2_name3_index (name,name2,name3)
+	)
+
+ALTER TABLE sellers
+DROP INDEX name_index,
+DROP INDEX name2_index;
+
+alter table sellers
+add index name_index(name),
+add index name2_index (name2)
+
+Select * from sellers where name=’x’
+Select * from sellers where name=’x’ and name2=’x’
+Select * from sellers where name=’x’ and name2=’x’ and name3=’x’
+
+Alter table products
+	Add fulltext produk_search (name,description)
+
+Alter table products
+	Drop index produk_search
+
+SELECT * FROM products
+WHERE name LIKE '%es%' OR description LIKE '%bakso%'
+
+select*from products 
+where match (name,description)
+against (‘bakso’ in natural language mode)
+
+select * from products 
+where match (name,description)
+against (‘+ayam -bakso’ in boolean mode) 
+
+select * from products 
+where match (name,description)
+against (‘ayam’ with query expansion) 
+
+
+
+
+
+
+
+
+
+
+
+
