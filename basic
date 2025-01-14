@@ -384,6 +384,105 @@ update wishlist
 set id_customers=1
 where id=1
 
+multiple join -> di wishlist ada 2 foreign key id_produk dan id_customers ini yang buat berelasi 
+select * from wishlist join products on (wihslist.id_produk=products.id)
+join customers on (wishlist.id_customers=customers.id)
+
+select customers.email,products.id, products.name,wishlist.description 
+from wishlist join products on (wishlist.id_produk=products.id)
+join customers on (wishlist.id_customers=customers.id)
+
+one to one relationship -> contohnya 1 costumers hanya punya 1 e-wallet dan 1 wallet hanya boleh dimiliki oleh 1 customers
+membuat table wallet karena tabel customers sudah ada
+create table wallet 
+(
+id int  not null auto_increment,
+id_customers int not null, -> foreign key di wallet, primary key di customers 
+balance int not null default 0,
+primary key (id),
+unique key id_customers_unique (id_customers)
+constraint fk_wallet_customers
+foreign key (id_customers) references customers(id)
+)
+
+memasukkan nilai ke tabel wallet dengan memastikan bahwa data sudah ada di table customers
+insert into wallet(id_customers,balance)
+values(1,' ') -> berhasil karena ada data di bale customers 
+insert into wallet(id_customers,balance)
+values(2,' ')  -> tidak berhasil karena data tidak ada di table customers 
+
+select *from wallet -> menampilakan semua kolom dari kedua tabel
+join customers on (wallet.id_customers=customers.id)
+
+select customers.email ,wallet.balance -> hanya menampilkan email dan balance
+from wallet 
+join customers on (wallet.id_customers=customers.id)
+
+one to many relationship -> 1 category bisa berlasi ke banyak products. bedanya dengan one to many tidak pakai unique key
+membuat tabel category karena table products sudah ada 
+create table category
+(
+id varchar(10) ,
+name varchar (100),
+primary key(id)
+)
+
+karena table  product sudah ada tinggal tambahkan foreign key nya,namun sebelumnya di table products ada kolom category agar tidak bingung hapus dahulu
+alter table products 
+drop column category
+
+setelah itu tambahkan kolom id_category pada tabel products untuk relasinya 
+alter table products 
+add column id_category varchar (10) 
+
+selanjutnya mengubah kolom id_category jadi foreign key 
+alter table products 
+add constraint fk_category_products
+foreign key (id_category) references category(id)
+
+karena tabel category belum ada datanya masukkan dulu datanya 
+insert into category(id,name)
+values 	('a','makanan'),
+	('b','minuman'),
+	('c','lain-lain')
+
+memasukkan nilai ke tabel products dengan memastikan bahwa data sudah ada di table category hanya untuk mengecek 
+update products 
+set id_category='a'
+where id in (1,5,6,7,9,10,11,12,13,14,15);
+
+update products 
+set id_category='b'
+where id in (2,4,8)
+
+melakukan join
+select products.id, products.name,category.name
+from products
+join category on (category.id=products.id_category);
+
+relasi many to many -> products dan order 
+solusi : menambhakan table baru ditengahnya yang berisi id dari tabel pertama dan tabel kedua 
+dalam hal ini id_products dan id_order
+
+membuat table orders 
+create table orders
+(
+id int not null auto_increment,
+total int not null,
+order_date timestamp default current_timestamp,
+primary key (id)
+)
+
+
+
+
+	
+
+    
+    
+
+
+
 
 
 
