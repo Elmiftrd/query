@@ -473,9 +473,86 @@ order_date timestamp default current_timestamp,
 primary key (id)
 )
 
+membuat table orders_detail
+create table orders_detail
+(
+id_products int not null,
+id_orders int not null,
+price int not null,
+quantity int not null,
+primary key(id_products,id_orders)
+)
 
+membuat foreign key untuk table relasi(tengah-tengah)
+alter table orders_detail
+add constraint fk_orders_detail_products
+foreign key(id_products) references products(id)  -> tipe data id di table products harusa sama dgn kolom id_products di tabel orders_detail
 
+alter table orders_detail
+add constraint fk_orders_detail_orders
+foreign key(id_orders) references orders(id) -> tipe data id di tabel orders harus sama dengan kolom id_orders di table orders_detail\
 
+masukkan data ke tabel orders 
+insert into orders (total)
+values (50000),(50000),(50000)
+
+masukkan data ke tabel orders_detail
+insert into orders_detail (id_products,id_orders,price,quantity)
+values  (1,1,25000,1),
+	(2,1,25000,1)
+insert into orders_detail (id_products,id_orders,price,quantity)
+values  (4,2,25000,1),
+	(5,2,25000,1)
+insert into orders_detail (id_products,id_orders,price,quantity)
+values  (1,3,25000,1),
+	(4,3,25000,1)
+
+melakukan join 
+select * from orders join orders_detail on (orders_detail.id_order=orders.id)
+		     join products on (products.id=orders_detail.id_products)
+
+select orders.id, products.id, products.name,orders_detail.quantity,orders_detail.price from orders
+join orders_detail on (orders_detail.id_order=orders.id)
+		     join products on (products.id=orders_detail.id_products)
+
+macam-macam join
+inner join
+select * from category
+inner join products on (products.id_category=category.id)
+
+menambhakan data ke table category 
+insert into category (id,name)
+values (4, 'oleh-oleh'),
+	(5,'gadget')
+
+menambahkan data ke table products
+insert into products (id,name,price,quantity)
+values(23,'x satu',25000,200),
+	(24,'x dua',10000,300),
+	(25,'x tiga',15000,500)
+
+left join 
+select * from category
+left join products on (products.id_category=category.id)
+
+right join
+select * from category
+right join products on (products.id_category=category.id)
+
+cross join (mengalikan dua kali)
+select * from category 
+cross join products
+
+melakukan subquery di where clause
+select * from products 
+where price>(select avg(price) from products)
+
+melakukan subquery di from clause 
+select max(price)
+from (select price
+	from category
+		inner join products
+			on(products.id_category=category.id)) as cp
 	
 
     
