@@ -531,15 +531,15 @@ values(23,'x satu',25000,200),
 	(24,'x dua',10000,300),
 	(25,'x tiga',15000,500)
 
-left join 
+left join -> id category (4,5 muncul walaupun tidak ada productnya(null))
 select * from category
 left join products on (products.id_category=category.id)
 
-right join
+right join -> products muncul walaupun id catgeory null)
 select * from category
 right join products on (products.id_category=category.id)
 
-cross join (mengalikan dua kali)
+cross join (mengalikan dua kali) -> jarang digunakan
 select * from category 
 cross join products
 
